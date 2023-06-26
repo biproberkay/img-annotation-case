@@ -1,1 +1,1 @@
-# img-annotation-case
+# Berkay.ImgAnnotationAngular
