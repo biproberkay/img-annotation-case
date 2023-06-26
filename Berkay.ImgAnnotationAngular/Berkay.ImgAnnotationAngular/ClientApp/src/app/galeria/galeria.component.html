@@ -1,0 +1,11 @@
+<div class="galeria">
+  <div class="image-list">
+    <div *ngFor="let image of images">
+      <img class="responsive" [src]="'/assets/images/' + image.fileName" alt="Resim">
+      <p>
+        <a (click)="selectImage(image)">View Image</a>
+      </p>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div>
+  <img #annotate [src]="'/assets/images/' + filename" class="responsive" alt="Resim">
+  <!-- Bounding box işlemleri için gereken alanlar -->
+</div>
+<button (click)="save()">Save</button>
+<button (click)="clear()">Clear</button>
+<button (click)="annotateAgain()">Annotate</button>
+<div *ngFor="let item of annotations">
+  {{ item.body[0].value }} - {{ item.body[1].value }}<button (click)="del(item.id)">remove</button>
+</div>
