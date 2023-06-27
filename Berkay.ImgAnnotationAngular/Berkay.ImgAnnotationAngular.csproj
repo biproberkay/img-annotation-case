@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\widgets\" />
     <Folder Include="wwwroot\Files\Uploads\images\" />
   </ItemGroup>
 

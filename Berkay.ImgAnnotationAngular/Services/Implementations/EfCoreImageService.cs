@@ -14,19 +14,63 @@ namespace Berkay.ImgAnnotationAngular.Services.Implementations
             _dbContext = dbContext;
         }
 
-        public IEnumerable<ImageData> GetImages()
+        public bool AddAnnotation(AnnotationCreateDto annotation)
         {
-            return _dbContext.ImageDatas.AsNoTracking().ToArray();
+            try
+            {
+                var anno = new Annotation
+                {
+                    LeftUpX = annotation.LeftUpX,
+                    LeftUpY = annotation.LeftUpY,
+                    Width = annotation.Width,
+                    Height = annotation.Height,
+                    ImageId = annotation.ImageId,
+                    TagId = annotation.TagId
+                };
+                _dbContext.Annotations.Add(anno);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
         }
 
-        public ImageData SaveImage(string fileName, string fileType)
+        public Tag AddTag(string name)
         {
-            var image = new ImageData
+            var entry = _dbContext.Set<Tag>().Add(new Tag { Name = name });
+            _dbContext.SaveChanges();
+            return entry.Entity;
+        }
+
+        public IEnumerable<Data.Models.Image> GetImages()
+        {
+            return _dbContext.Images.AsNoTracking().ToArray();
+        }
+
+        public List<Tag> GetTags()
+        {
+            return _dbContext.Set<Tag>().ToList();
+        }
+
+        public async Task<Data.Models.Image> SaveImageAsync(IFormFile file)
+        {
+            string targetDirectory = "ClientApp/src/assets/images";
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(targetDirectory, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                FileName = fileName,
-                FileType = fileType
+                await file.CopyToAsync(stream);
+            }
+            var image = new Data.Models.Image
+            {
+                FileName = uniqueFileName,
+                FileType = file.ContentType.Split('/')[1]
             };
-            var imageEntry = _dbContext.ImageDatas.Add(image);
+            var imageEntry = _dbContext.Images.Add(image);
             var savedData = imageEntry.Entity;
             _dbContext.SaveChanges();
             return savedData;

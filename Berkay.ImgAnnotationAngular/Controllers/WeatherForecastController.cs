@@ -1,6 +1,7 @@
 ﻿using Berkay.ImgAnnotationAngular.Data.Models;
 using Berkay.ImgAnnotationAngular.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Berkay.ImgAnnotationAngular.Controllers
 {
@@ -35,7 +36,7 @@ namespace Berkay.ImgAnnotationAngular.Controllers
         }
 
         [HttpGet("images")]
-        public IEnumerable<ImageData> GetImages()
+        public IEnumerable<Image> GetImages()
         {
             return _imageService.GetImages().ToArray();
         }
@@ -47,21 +48,27 @@ namespace Berkay.ImgAnnotationAngular.Controllers
             {
                 return BadRequest("Geçersiz dosya");
             }
-
-            // Resim dosyasını kaydetme işlemini burada gerçekleştirin
-            string targetDirectory = "ClientApp/src/assets/images";
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-            string filePath = Path.Combine(targetDirectory, uniqueFileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            // Dosya adını, dosya yolunu ve ID'yi veritabanına kaydedebilirsiniz
-            var result = _imageService.SaveImage(uniqueFileName, file.ContentType.Split('/')[1]);
+            var result = await _imageService.SaveImageAsync(file);
             return Ok(result);
         }
 
+        [HttpPost("tagadd")]
+        public ActionResult TagAdd([FromBody] JsonElement data)
+        {
+            string tagName = data.GetProperty("tagName").GetString();
+            return Ok(_imageService.AddTag(tagName));
+        }
+
+        [HttpGet("tags")]
+        public IEnumerable<Tag> GetTags()
+        {
+            return _imageService.GetTags();
+        }
+
+        [HttpPost("annotationadd")]
+        public bool AddAnnotation([FromBody] AnnotationCreateDto annotation)
+        {
+            return _imageService.AddAnnotation(annotation);
+        }
     }
 }

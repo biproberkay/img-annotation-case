@@ -9,7 +9,17 @@ namespace Berkay.ImgAnnotationAngular.Data
         {
         }
 
-        public DbSet<ImageData> ImageDatas { get; set; } 
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Annotation> Annotations { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Image>()
+                .HasMany(e => e.Tags)
+                .WithMany(e => e.Images)
+                .UsingEntity<Annotation>();
+        }
 
     }
 }

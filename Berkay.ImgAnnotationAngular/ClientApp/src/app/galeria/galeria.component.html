@@ -1,11 +1,30 @@
-<div class="galeria">
-  <div class="image-list">
-    <div *ngFor="let image of images">
-      <img class="responsive" [src]="'/assets/images/' + image.fileName" alt="Resim">
-      <p>
-        <a (click)="selectImage(image)">View Image</a>
-      </p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="sticky-top">
+        <h2>TG Form</h2>
+        <form (ngSubmit)="submitTagForm()">
+          <label for="tagInput">Enter Tag:</label>
+          <input type="text" id="tagInput" [(ngModel)]="tagInput" name="tagInput">
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div class="tag-list">
+        <h2>Tags</h2>
+        <ul>
+          <li *ngFor="let tag of tags">{{ tag.name }}</li>
+        </ul>
+      </div>
     </div>
-
+    <!-- Galeri içeriği buraya gelecek -->
+    <div class="col-sm-6 col-md-8 col-lg-9">
+      <div *ngFor="let image of images">
+        <img class="img-fluid" [src]="'/assets/images/' + image.fileName" alt="Resim">
+        <p>
+          <a (click)="selectImage(image)">View Image</a>
+        </p>
+      </div>
+    </div>
   </div>
 </div>
+

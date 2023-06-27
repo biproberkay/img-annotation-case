@@ -4,7 +4,10 @@ namespace Berkay.ImgAnnotationAngular.Services
 {
     public interface IImageService
     {
-        IEnumerable<ImageData> GetImages();
-        ImageData SaveImage(string fileName, string fileType);
+        IEnumerable<Image> GetImages();
+        Task<Image> SaveImageAsync(IFormFile file);
+        Tag AddTag(string tagName);
+        List<Tag> GetTags();
+        bool AddAnnotation(AnnotationCreateDto annotation);
     }
 }

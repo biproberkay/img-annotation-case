@@ -18,7 +18,7 @@ namespace Berkay.ImgAnnotationAngular.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.19");
 
-            modelBuilder.Entity("Berkay.ImgAnnotationAngular.Data.Models.ImageData", b =>
+            modelBuilder.Entity("Berkay.ImgAnnotationAngular.Data.Models.Image", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace Berkay.ImgAnnotationAngular.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ImageDatas");
+                    b.ToTable("Images");
                 });
 #pragma warning restore 612, 618
         }
